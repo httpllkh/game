@@ -2,14 +2,13 @@ import os
 import sys
 import pygame
 
-size = width, height = 1280, 720
-screen = pygame.display.set_mode(size)
+SIZE = WIDTH, HEIGHT = 1280, 720
+screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption('BossOfGym')
 clock = pygame.time.Clock()
 
-
 def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('sprites', name)
     # если файл не существует, то выходим
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
@@ -25,8 +24,33 @@ def load_image(name, colorkey=None):
     return image
 
 
-# all_sprites = pygame.sprite.Group()
+class Platform1(pygame.sprite.Sprite):
+    image = load_image("level1/Платформа1.png")
+    image = pygame.transform.scale(image, (600, 300))
 
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.image = Platform1.image
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = HEIGHT - 300
+
+
+class Platform2(pygame.sprite.Sprite):
+    image = load_image("level1/Платформа2.png")
+    image = pygame.transform.scale(image, (432, 155))
+
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.image = Platform2.image
+        self.rect = self.image.get_rect()
+        self.rect.x = 600
+        self.rect.y = HEIGHT - 155
+
+
+all_sprites = pygame.sprite.Group()
+Platform1(all_sprites)
+Platform2(all_sprites)
 
 running = True
 while running:
@@ -37,7 +61,7 @@ while running:
             running = False
 
     screen.fill(pygame.Color("white"))
-    # all_sprites.draw(screen)
+    all_sprites.draw(screen)
     pygame.display.flip()
 
 pygame.quit()
